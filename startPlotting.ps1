@@ -27,11 +27,11 @@ param (
 )
 
 # Update Based on your System 
-$chiaVersion = "1.1.2"  # Update to the installed version of Chia.
+$chiaVersion = "1.1.3"  # Update to the installed version of Chia.
 $memBuffer = 6*1024 # Maximum memory commited per instance (change based on total memory and number of concurrent processes)
 $numThreads = 4 # Number of threads per instance (recommended 2 to 4)
 $delaySec = $delayMin * 60 # Delay between start of process.  This delays the plotting process
-$logFolder = "c:\scripts\log\" # Update with the log location
+$logFolder = "c:\log\" # Update with the log location
 
 # DO NOT CHANGE BELOW
 $host.ui.RawUI.WindowTitle = "Chia Farmer: " + $tempPath + " Waiting " + $delayMin
@@ -45,7 +45,7 @@ Write-Output "Init Process to $tempPath Destination $destinationPath Memory $mem
 Start-Sleep -Seconds $delaySec
 
 # Delete all temporary files, in case previous run did not complete
-Get-ChildItem -Path $tempPath -Include *.tmp -File -Recurse  | foreach { $_.Delete()}
+Get-ChildItem -Path $tempPath -Include *.tmp -File -Recurse  | ForEach-Object { $_.Delete()}
 
 # Confirm it is working by outputing version
 # &$chiaDeamon "version"

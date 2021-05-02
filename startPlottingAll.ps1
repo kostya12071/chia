@@ -26,9 +26,6 @@ param (
 	[int]$delayMin = 0
 )
 
-Start-Process powershell -ArgumentList "startPlotting.ps1 -tempPath K:\P3\ -destinationPath K:\Plots\ -delayMin 120" -WindowStyle Minimized
-
-
 for ($instanceNum = 0 ; $instanceNum -lt $instanceCount ; $instanceNum++){
 
 	$instanceDelay = $instanceNum*$delayMin
