@@ -27,9 +27,9 @@ param (
 )
 
 # Update Based on your System 
-$chiaVersion = "1.1.3"  # Update to the installed version of Chia.
-$memBuffer = 6*1024 # Maximum memory commited per instance (change based on total memory and number of concurrent processes)
-$numThreads = 4 # Number of threads per instance (recommended 2 to 4)
+$chiaVersion = "1.1.5"  # Update to the installed version of Chia.
+$memBuffer = 4*1024 # Maximum memory commited per instance (change based on total memory and number of concurrent processes)
+$numThreads = 2 # Number of threads per instance (recommended 2 to 4)
 $delaySec = $delayMin * 60 # Delay between start of process.  This delays the plotting process
 $logFolder = "c:\log\" # Update with the log location
 
@@ -45,7 +45,7 @@ Write-Output "Init Process to $tempPath Destination $destinationPath Memory $mem
 Start-Sleep -Seconds $delaySec
 
 # Delete all temporary files, in case previous run did not complete
-Get-ChildItem -Path $tempPath -Include *.tmp -File -Recurse  | ForEach-Object { $_.Delete()}
+Get-ChildItem -Path $tempPath -Include *.tmp -File -Recurse  | foreach { $_.Delete()}
 
 # Confirm it is working by outputing version
 # &$chiaDeamon "version"

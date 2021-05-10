@@ -8,7 +8,7 @@ Scripts developed for:
 
 * Windows 10 
 * PowerShell (6/7)
-* Chia for Windows 1.1.3 (https://github.com/Chia-Network/chia-blockchain/wiki/INSTALL#Windows)
+* Chia for Windows 1.1.5 (https://github.com/Chia-Network/chia-blockchain/wiki/INSTALL#Windows)
 
 ## Script Overview
 

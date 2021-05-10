@@ -31,6 +31,6 @@ for ($instanceNum = 0 ; $instanceNum -lt $instanceCount ; $instanceNum++){
 	$instanceDelay = $instanceNum*$delayMin
 	$arg = ".\startPlotting.ps1 -tempPath $($tempPath)P$($instanceNum)\ -destinationPath $destinationPath -delayMin $instanceDelay"
 	"Starting process for Farmer $instanceNum..."
-	Start-Process powershell -ArgumentList $arg -WindowStyle Minimized
+  Start-Process powershell -ArgumentList $arg -WindowStyle Minimized
 }
 "All Farmers started. Can close this window"
