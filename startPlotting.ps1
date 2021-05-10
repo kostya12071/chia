@@ -41,17 +41,25 @@ $logFile = $logFolder + $(Get-Date -Format "yyyy_MM_dd_HH_mm") + "_" + $delayMin
 
 Write-Output "Init Process to $tempPath Destination $destinationPath Memory $memBuffer threads $numThreads Delay $delayMin minutes" | Tee-Object -FilePath $logFile -Append
 
+# Create directory if it does not exist
+New-Item -ItemType Directory -Force -Path $tempPath
+
 # If you are staggaring your plotting, you can use this
 Start-Sleep -Seconds $delaySec
-
-# Delete all temporary files, in case previous run did not complete
-Get-ChildItem -Path $tempPath -Include *.tmp -File -Recurse  | foreach { $_.Delete()}
 
 # Confirm it is working by outputing version
 # &$chiaDeamon "version"
 
-Write-Output "START Plotting to $tempPath Destination $destinationPath Memory $memBuffer threads $numThreads Delay $delayMin minutes" | Tee-Object -FilePath $logFile -Append
+# Start plotting - Infinite Loop
+for ($instanceCount = 0;;$instanceCount++)
+{
 
-# Start plotting
-$host.ui.RawUI.WindowTitle = "Chia Farmer: " + $tempPath + " Running"
-&$chiaDeamon  plots create -k 32 -n 100 -t $tempPath -d $destinationPath -b $memBuffer -r $numThreads | Out-File $logFile -Append
+  # Delete all temporary files, in case previous run did not complete
+  Get-ChildItem -Path $tempPath -Include *.tmp -File -Recurse  | foreach { $_.Delete()}
+
+  Write-Output "START Plotting $instanceCount to $tempPath Destination $destinationPath Memory $memBuffer threads $numThreads" | Tee-Object -FilePath $logFile -Append
+  $logFile = $logFolder + $(Get-Date -Format "yyyy_MM_dd_HH_mm_ss") + "_" + $instanceCount + ".log"
+  $host.ui.RawUI.WindowTitle = "Chia Farmer: " + $tempPath + " plotting " + $instanceCount
+
+  &$chiaDeamon  plots create -k 32 -n 1 -t $tempPath -d $destinationPath -b $memBuffer -r $numThreads | Out-File $logFile -Append
+}
