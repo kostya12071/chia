@@ -31,8 +31,8 @@ $chiaVersion = "1.1.5"  # Update to the installed version of Chia.
 $memBuffer = 4*1024 # Maximum memory commited per instance (change based on total memory and number of concurrent processes)
 $numThreads = 2 # Number of threads per instance (recommended 2 to 4)
 $delaySec = $delayMin * 60 # Delay between start of process.  This delays the plotting process
-$logFolder = ".\Log\" # It will create a folder for the logs in the script path, you may also update with the path you want to the log location ( c:\...\log\) 
-$numberOfCyclePerProcessus = 100 
+$logFolder = ".\Log\" # It will create a folder for the logs in the script file folder, you may also update with the path you want to the log location ( c:\...\log\) 
+$numberOfCyclePerProcessus = 100 # A Chia Daemon processus will run this number of time creating this number of plots.
 
 
 # DO NOT CHANGE BELOW
