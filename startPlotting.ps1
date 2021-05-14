@@ -31,13 +31,15 @@ $chiaVersion = "1.1.5"  # Update to the installed version of Chia.
 $memBuffer = 4*1024 # Maximum memory commited per instance (change based on total memory and number of concurrent processes)
 $numThreads = 2 # Number of threads per instance (recommended 2 to 4)
 $delaySec = $delayMin * 60 # Delay between start of process.  This delays the plotting process
-$logFolder = "c:\log\" # Update with the log location
+$logFolder = ".\Log\" # It will create a folder for the logs in the script file folder, you may also update with the path you want to the log location ( c:\...\log\) 
+$numberOfCyclePerProcessus = 100 # A Chia Daemon processus will run this number of time creating this number of plots.
+
 
 # DO NOT CHANGE BELOW
 $host.ui.RawUI.WindowTitle = "Chia Farmer: " + $tempPath + " Waiting " + $delayMin
 
 $chiaDeamon = $env:LOCALAPPDATA + "\chia-blockchain\app-" + $chiaVersion + "\resources\app.asar.unpacked\daemon\chia.exe" 
-$logFile = $logFolder + $(Get-Date -Format "yyyy_MM_dd_HH_mm") + "_" + $delayMin + ".log"
+$logFile = $logFolder + $env:computername + "_" + $(Get-Date -Format "yyyy_MM_dd_HH_mm") + "_" + $delayMin + ".log" 
 
 Write-Output "Init Process to $tempPath Destination $destinationPath Memory $memBuffer threads $numThreads Delay $delayMin minutes" | Tee-Object -FilePath $logFile -Append
 
