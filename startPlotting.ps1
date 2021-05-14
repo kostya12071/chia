@@ -1,4 +1,4 @@
-# Chia Plotting Automation Script 
+ # Chia Plotting Automation Script 
 # by Kostya
 
 <#
@@ -27,19 +27,33 @@ param (
 )
 
 # Update Based on your System 
-$chiaVersion = "1.1.5"  # Update to the installed version of Chia.
+$chiaVersion = "1.1.5" # Update to the installed version of Chia.
 $memBuffer = 4*1024 # Maximum memory commited per instance (change based on total memory and number of concurrent processes)
 $numThreads = 2 # Number of threads per instance (recommended 2 to 4)
 $delaySec = $delayMin * 60 # Delay between start of process.  This delays the plotting process
-$logFolder = ".\Log\" # It will create a folder for the logs in the script file folder, you may also update with the path you want to the log location ( c:\...\log\) 
-$numberOfCyclePerProcessus = 100 # A Chia Daemon processus will run this number of time creating this number of plots.
+$logPath = ".\" # It will create a folder for the logs in this path (".\" means actual script folder location)
+$logFolder = "Log" # Name of the Log folder
+$pool = "..." # set your pool key here
+$farmer = "..." # set your farmer key here
+$numberOfPlotsPerInstance = 100 # This will give this number of plots per instance
 
 
 # DO NOT CHANGE BELOW
 $host.ui.RawUI.WindowTitle = "Chia Farmer: " + $tempPath + " Waiting " + $delayMin
 
 $chiaDeamon = $env:LOCALAPPDATA + "\chia-blockchain\app-" + $chiaVersion + "\resources\app.asar.unpacked\daemon\chia.exe" 
-$logFile = $logFolder + $env:computername + "_" + $(Get-Date -Format "yyyy_MM_dd_HH_mm") + "_" + $delayMin + ".log" 
+
+# Check if the Log folder does exits or not and will create it if needed
+$a = Test-Path $logFolder 
+IF ($a -eq $false){
+New-Item -Name $logFolder -ItemType "directory" -Path $logPath
+Write-Host "The log folder has been created there: $logPath " # If the log folder do not exist it the Log folder will be created in the $logPath with this name $logFolder and the result will be shown to the user
+}ELSE{
+Write-Host "The Log folder has been located at : $logPath" # If the log folder does exist it will show to the user the actual path
+}
+
+$logFile = $logPath + $logFolder + "\" + $env:computername + "_" + $(Get-Date -Format "yyyy_MM_dd_HH_mm") + "_" + $delayMin + ".log"
+
 
 Write-Output "Init Process to $tempPath Destination $destinationPath Memory $memBuffer threads $numThreads Delay $delayMin minutes" | Tee-Object -FilePath $logFile -Append
 
@@ -48,6 +62,7 @@ New-Item -ItemType Directory -Force -Path $tempPath
 
 # If you are staggaring your plotting, you can use this
 Start-Sleep -Seconds $delaySec
+
 
 # Confirm it is working by outputing version
 # &$chiaDeamon "version"
@@ -60,8 +75,8 @@ for ($instanceCount = 0;;$instanceCount++)
   Get-ChildItem -Path $tempPath -Include *.tmp -File -Recurse  | foreach { $_.Delete()}
 
   Write-Output "START Plotting $instanceCount to $tempPath Destination $destinationPath Memory $memBuffer threads $numThreads" | Tee-Object -FilePath $logFile -Append
-  $logFile = $logFolder + $(Get-Date -Format "yyyy_MM_dd_HH_mm_ss") + "_" + $instanceCount + ".log"
+  $logFile = $logPath + $logFolder + "\" + $env:computername + "_" + $(Get-Date -Format "yyyy_MM_dd_HH_mm_ss") + "_" + $instanceCount + ".log"
   $host.ui.RawUI.WindowTitle = "Chia Farmer: " + $tempPath + " plotting " + $instanceCount
 
-  &$chiaDeamon  plots create -k 32 -n 1 -t $tempPath -d $destinationPath -b $memBuffer -r $numThreads | Out-File $logFile -Append
-}
+  &$chiaDeamon  plots create -k 32 -n $numberOfPlotsPerInstance -f $farmer -p $pool -t $tempPath -d $destinationPath -b $memBuffer -r $numThreads | Out-File $logFile -Append
+} 
