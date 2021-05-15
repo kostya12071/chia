@@ -74,6 +74,20 @@ startPlotting uses the following parameters:
 
 `delayMin` delay in Minutes.  Plotting will start after the number of minutes specified. Optimal delay is based on your system performance. Recommended is 40 min for most users. Default is 5 minutes.
 
+You can also specify `farmer public key` and `pool public key` to be used in plotting by uncommenting `$farmerPublicKey` and `$poolPublicKey` variables and setting the corresponding values.  if they are not provided, deamon will use the keys specified in the config.yaml file.
+
+#### Terminating Process ####
+
+*Immediate*
+
+The plotting will continue for number of iterations specified by $numberOfPlotsPerInstance, which should be set to a large number in most cases to allow fo continous plotting.
+
+In case you want to terminate plots in progress, you can press Cntr+C in the PowerShell window to cancel the process or close the window.  Any plots in progress will be lost. Temp files created during the terminated ran will be removed if you re-start the process again.
+
+*After Completing Plot in Progress*
+
+If you can wait for plotting in progress to complete, create a file called 'stop' with any extention in either Temp or Destination folder.  Script will look for this file and if found, will exit as soon as it's done with plot in progress.
+
 ***Examples***
 
 Start using drive D:\P1\ as temp space and e:\ as destination with 40 min delay. This process will use folders D:\P1 as temp folders
