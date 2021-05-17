@@ -44,7 +44,7 @@ $chiaDeamon = $env:LOCALAPPDATA + "\chia-blockchain\app-" + $chiaVersion + "\res
 # Creates a folder if does not exist; will not remove files if folder already present
 New-Item -ItemType Directory -Path $logFolderPath -Force
 
-Write-Output "Init Process to $tempPath Destination $destinationPath Memory $memBuffer threads $numThreads Delay $delayMin minutes" | Tee-Object -FilePath $logFile -Append
+Write-Output "Init Process to $tempPath Destination $destinationPath Memory $memBuffer threads $numThreads Delay $delayMin minutes"
 Write-Host "The Log folder is located at: $logFolderPath" # show to the user the actual path
 
 # Create directory if it does not exist
