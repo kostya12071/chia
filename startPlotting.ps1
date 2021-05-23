@@ -27,7 +27,7 @@ param (
 )
 
 # Update Based on your System 
-$chiaVersion = "1.1.5" # Update to the installed version of Chia.
+$chiaVersion = "1.1.6" # Update to the installed version of Chia.
 $memBuffer = 4*1024 # Maximum memory commited per instance (change based on total memory and number of concurrent processes)
 $numThreads = 2 # Number of threads per instance (recommended 2 to 4)
 $delaySec = $delayMin * 60 # Delay between start of process.  This delays the plotting process
