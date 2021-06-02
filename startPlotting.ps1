@@ -36,8 +36,8 @@ $logFolderPath = ".\Log\" # Name of the Log folder. can be relative (.\ ) or abs
 $numberOfPlotsPerInstance = 1000 # This will give this number of plots per instance
 
 # DO NOT CHANGE BELOW
-$chiaVersions=get-childitem -path $env:LOCALAPPDATA\chia-blockchain -Filter app-* | sort { [version]($_.Name -replace '^.*-(\d+(\.\d+){1,5})$', '$1') } -Descending	
-$chiaVersion=$chiaVersions -replace "app-", "" | Select-Object -First 1   # Auto-Update to the latest installed version of Chia.
+$chiaVersions=get-childitem -path $env:LOCALAPPDATA\chia-blockchain -Filter app-* | sort { [version]($_.Name -replace '^.*-(\d+(\.\d+){1,5})$', '$1') } -Descending	| Select-Object -First 1
+$chiaVersion=$chiaVersions -replace "app-", ""    # Auto-Update to the latest installed version of Chia.
 
 $host.ui.RawUI.WindowTitle = "Chia Farmer: " + $tempPath + " Waiting " + $delayMin
 
