@@ -44,9 +44,18 @@ $host.ui.RawUI.WindowTitle = "Chia Farmer: " + $tempPath + " Waiting " + $delayM
 $chiaDeamon = $env:LOCALAPPDATA + "\chia-blockchain\app-" + $chiaVersion + "\resources\app.asar.unpacked\daemon\chia.exe" 
 
 # Creates a folder if does not exist; will not remove files if folder already present
-New-Item -ItemType Directory -Path $logFolderPath -Force
+if (-not $logFolderPath.EndsWith('\'))
+	{
+		$logFolderPath += '\'
+	}
 
-Write-Output "Init Process to $tempPath Destination $destinationPath Memory $memBuffer threads $numThreads Delay $delayMin minutes"
+New-Item -ItemType Directory -Path $logFolderPath -Force
+$Date = Get-Date -Format "yyyyMMdd"
+New-Item -ItemType Directory -Path $logFolderPath\$Date\
+$logFolderPath += "\$Date\"
+$logFile = $logFolderPath + "StartPlotting.log"
+
+Write-Output "Init Process to $tempPath Destination $destinationPath Memory $memBuffer threads $numThreads Delay $delayMin minutes" | Tee-Object -FilePath $logFile -Append
 Write-Host "The Log folder is located at: $logFolderPath" # show to the user the actual path
 
 # Create directory if it does not exist
