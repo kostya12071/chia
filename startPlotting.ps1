@@ -27,7 +27,6 @@ param (
 )
 
 # Update Based on your System 
-$chiaVersion = "1.1.6" # Update to the installed version of Chia.
 $memBuffer = 4*1024 # Maximum memory commited per instance (change based on total memory and number of concurrent processes)
 $numThreads = 2 # Number of threads per instance (recommended 2 to 4)
 $delaySec = $delayMin * 60 # Delay between start of process.  This delays the plotting process
@@ -37,6 +36,9 @@ $logFolderPath = ".\Log\" # Name of the Log folder. can be relative (.\ ) or abs
 $numberOfPlotsPerInstance = 1000 # This will give this number of plots per instance
 
 # DO NOT CHANGE BELOW
+$chiaVersions=get-childitem -path $env:LOCALAPPDATA\chia-blockchain -Filter app-* | sort { [version]($_.Name -replace '^.*-(\d+(\.\d+){1,5})$', '$1') } -Descending	
+$chiaVersion=$chiaVersions -replace "app-", "" | Select-Object -First 1   # Auto-Update to the latest installed version of Chia.
+
 $host.ui.RawUI.WindowTitle = "Chia Farmer: " + $tempPath + " Waiting " + $delayMin
 
 $chiaDeamon = $env:LOCALAPPDATA + "\chia-blockchain\app-" + $chiaVersion + "\resources\app.asar.unpacked\daemon\chia.exe" 
