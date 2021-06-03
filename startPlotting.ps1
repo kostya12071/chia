@@ -27,7 +27,6 @@ param (
 )
 
 # Update Based on your System 
-$chiaVersion = "1.1.6" # Update to the installed version of Chia.
 $memBuffer = 4*1024 # Maximum memory commited per instance (change based on total memory and number of concurrent processes)
 $numThreads = 2 # Number of threads per instance (recommended 2 to 4)
 $delaySec = $delayMin * 60 # Delay between start of process.  This delays the plotting process
@@ -37,14 +36,26 @@ $logFolderPath = ".\Log\" # Name of the Log folder. can be relative (.\ ) or abs
 $numberOfPlotsPerInstance = 1000 # This will give this number of plots per instance
 
 # DO NOT CHANGE BELOW
+$chiaVersions=get-childitem -path $env:LOCALAPPDATA\chia-blockchain -Filter app-* | sort { [version]($_.Name -replace '^.*-(\d+(\.\d+){1,5})$', '$1') } -Descending	| Select-Object -First 1
+$chiaVersion=$chiaVersions -replace "app-", ""    # Auto-Update to the latest installed version of Chia.
+
 $host.ui.RawUI.WindowTitle = "Chia Farmer: " + $tempPath + " Waiting " + $delayMin
 
 $chiaDeamon = $env:LOCALAPPDATA + "\chia-blockchain\app-" + $chiaVersion + "\resources\app.asar.unpacked\daemon\chia.exe" 
 
 # Creates a folder if does not exist; will not remove files if folder already present
-New-Item -ItemType Directory -Path $logFolderPath -Force
+if (-not $logFolderPath.EndsWith('\'))
+	{
+		$logFolderPath += '\'
+	}
 
-Write-Output "Init Process to $tempPath Destination $destinationPath Memory $memBuffer threads $numThreads Delay $delayMin minutes"
+New-Item -ItemType Directory -Path $logFolderPath -Force
+$Date = Get-Date -Format "yyyyMMdd"
+New-Item -ItemType Directory -Path $logFolderPath\$Date\
+$logFolderPath += "\$Date\"
+$logFile = $logFolderPath + "StartPlotting.log"
+
+Write-Output "Init Process to $tempPath Destination $destinationPath Memory $memBuffer threads $numThreads Delay $delayMin minutes" | Tee-Object -FilePath $logFile -Append
 Write-Host "The Log folder is located at: $logFolderPath" # show to the user the actual path
 
 # Create directory if it does not exist
